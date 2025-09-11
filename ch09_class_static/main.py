@@ -207,29 +207,44 @@ print(f'매출 : {Shop.get_total()}원')
 class Shop:
     total = 0
     menu_list = [{'떡볶이' : 3000}, {'순대' : 4000}, {'튀김' : 500}, {'김밥' : 2000}]
-
-    @classmethod
-    def sales(cls, name, num):
-        print(f'{name}을(를) {num}개 판매')
-        for menu in cls.menu_list:
-            # print(menu)      # 결과값 : {'떡볶이' : 3000}, {'순대' : 4000}, {'튀김' : 500}, {'김밥' : 2000} -> 이걸 하나씩 파고 들어가기 위해 for문을 하나 더 씀
-            for item in menu:
-                if item == name :
-                    cls.total += menu[item] * num
+    menu_dict = {
+        '떡볶이' : 3000,
+        '순대' : 4000,
+        '튀김' : 500,
+        '김밥' : 2000
+    }
 
     @classmethod
     def get_total(cls):
         return cls.total
 
-Shop.sales('떡볶이', 1)
-Shop.sales('김밥', 2)
-Shop.sales('튀김', 5)
+    @classmethod
+    def sales1(cls, menu_name, num):
+        """ list의 내부의 dictionary를 반복하여 menu_name과 일치하는 key를 찾아 value를 return """
+        # for menu in cls.menu_list:
+        #     # print(menu)      # 결과값 : {'떡볶이' : 3000}, {'순대' : 4000}, {'튀김' : 500}, {'김밥' : 2000} -> 이걸 하나씩 파고 들어가기 위해 for문을 하나 더 씀
+        #     for item in menu:
+        #         if item == menu_name :
+        #             cls.total += menu[item] * num
+        #             print(f'{menu_name}을(를) {num}개 판매')
+
+        for menu_dict in cls.menu_list:
+            if menu_name in menu_dict:   # 딕셔너리 내에 pair 하나밖에 없는 상태인데, 있으면 이하의 코드라인이 실행되고 아니면 넘어갈겁니다. 그러면 다음 반복으로 가겠네요.
+                # in -> element를 기준해야 하기 때문에 dictionary의 element 중 'key'를 기준
+                cls.total += menu_dict[menu_name] * num
+                print(f'{menu_name}을(를) {num}개 판매')
+
+    @classmethod
+    def sales2(cls, menu_name, num):
+        if menu_name in cls.menu_dict:      # 그러면 굳이 반복문 다 돌려서 일치하는 key가 있는지 확인할 필요가 없습니다.
+            cls.total += cls.menu_dict[menu_name] * num
+            print(f'{menu_name}을(를) {num}개 판매')
+
+Shop.sales1('떡볶이', 1)
+Shop.sales1('김밥', 2)
+Shop.sales1('튀김', 5)
 print(f'매출 : {Shop.get_total()}원')
 
-
-
-
-
-
-
+Shop.sales2('떡볶이', 1)
+print(f'매출 : {Shop.get_total()}원')
 
